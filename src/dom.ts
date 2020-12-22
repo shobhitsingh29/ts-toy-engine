@@ -50,7 +50,7 @@ export class ElementData {
     return this.attributes.get("id") || null;
   }
 
-  classes(): Set<string> {
+  class(): Set<string> {
     const classes = this.attributes.get("class");
     if (!classes) {
       return new Set([]);

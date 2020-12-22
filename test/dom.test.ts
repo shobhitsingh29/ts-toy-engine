@@ -3,7 +3,7 @@ test("node", () => {
   expect(() => new DomNode([], new NodeType.Text("no mean"))).not.toThrow();
 });
 
-test("node type text", () => {
+test("node type atext", () => {
   expect(() => new NodeType.Text("no mean")).not.toThrow();
 });
 
@@ -30,17 +30,17 @@ test("element id not found", () => {
 });
 
 test("element class 1 found", () => {
-  expect(new ElementData("no mean", new Map([["class", "target1"]])).classes()).toEqual(
+  expect(new ElementData("no mean", new Map([["class", "target1"]])).class()).toEqual(
     new Set(["target1"])
   );
 });
 
 test("element class 2 found", () => {
-  expect(new ElementData("no mean", new Map([["class", "target1 target2"]])).classes()).toEqual(
+  expect(new ElementData("no mean", new Map([["class", "target1 target2"]])).class()).toEqual(
     new Set(["target1", "target2"])
   );
 });
 
 test("element class 0 found", () => {
-  expect(new ElementData("no mean", new Map([])).classes()).toEqual(new Set([]));
+  expect(new ElementData("no mean", new Map([])).class()).toEqual(new Set([]));
 });
