@@ -188,7 +188,7 @@ test("parse element 6", () => {
 });
 
 test("parse element 7", () => {
-  const currentParser = new HtmlParser(0, `<div foo="foo1" bar="bar2">bananas</div>`);
+  const currentParser = new HtmlParser(0, `<div foo="foo1" bar="bar2">bananas</div`);
   expect(() => {
     currentParser.parseElement();
   }).toThrow();

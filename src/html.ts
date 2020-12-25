@@ -51,8 +51,9 @@ export class HtmlParser {
   }
 
   consumeWhitespace() {
-    this.consumeWhile(isWhitespace);
+    return this.consumeWhile(isWhitespace);
   }
+
   parseText(): DomNode {
     const text = this.consumeWhile((s: string) => s !== "<");
 
@@ -76,6 +77,8 @@ export class HtmlParser {
     assert(this.consumeChar() === openQuote);
     return value;
   }
+
+  // Parse a single name="value" pair.
   parseAttr(): [string, string] {
     const name = this.parseTagName();
     assert(this.consumeChar() === "=");
@@ -83,12 +86,13 @@ export class HtmlParser {
     return [name, value];
   }
 
+  // Parse a list of name="value" pairs, separated by whitespace.
   parseAttributes(): AttrMap {
     const attributes = new Map<string, string>();
 
     while (true) {
       this.consumeWhitespace();
-      if (this.currChar() == ">") {
+      if (this.currChar() === ">") {
         break;
       }
       const [name, value] = this.parseAttr();
@@ -97,6 +101,7 @@ export class HtmlParser {
     return attributes;
   }
 
+  // Parse a single element, including its open tag, contents, and closing tag.
   parseElement(): DomNode {
     // opening tag
     assert(this.consumeChar() === "<");
@@ -112,18 +117,20 @@ export class HtmlParser {
     assert(this.consumeChar() === "/");
     assert(tagName === this.parseTagName());
     assert(this.consumeChar() === ">");
-
-    return Element(tagName, attributes, []);
+    return Element(tagName, attributes, children);
   }
 
+  // Parse a single node.
   parseNode(): DomNode {
-    if (this.currChar() === "<") {
-      return this.parseElement();
-    } else {
-      return this.parseText();
+    switch (this.currChar()) {
+      case "<":
+        return this.parseElement();
+      default:
+        return this.parseText();
     }
   }
 
+  // Parse a sequence of sibling nodes.
   parseNodes(): DomNode[] {
     const nodes: DomNode[] = [];
     while (true) {
